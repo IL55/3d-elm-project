@@ -2,6 +2,7 @@ port module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick )
+import Math.Vector3 as Vec3 exposing (vec3, Vec3)
 
 -- component import example
 
@@ -30,10 +31,23 @@ model = {
       width = 400,
       height = 400
     },
-    glass = {
-      depth = 8,
-      width = 6
+    glass =
+      let
+        d = 8
+        w = 6
+        bs = 2.0 / toFloat(w)
+
+        w2 = toFloat(w) / 2.0
+        bs2 = bs / 2.0
+      in
+      {
+        depth = d,
+        width = w,
+
+        blockSize = bs,
+        center = vec3 (w2 * bs - bs2) (w2 * bs - bs2) (-1.0 * bs2)
     },
+    -- blocks = [],
     figure = {
       figureType = 0,
       position = {

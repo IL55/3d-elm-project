@@ -1,8 +1,19 @@
 module Components.Model exposing (..)
 
+import Math.Vector3 as Vec3 exposing (vec3, Vec3)
+
 type alias GameGlass = {
+  -- depth of glass
   depth: Int,
-  width: Int
+
+  -- size of glass
+  width: Int,
+
+  -- size of one block
+  blockSize: Float,
+
+  -- center of glass in blocks coordinates
+  center: Vec3
 }
 
 type alias GameView = {
@@ -19,6 +30,14 @@ type alias FigurePosition = {
   rotationY: Int,
 
   rotationZ: Int
+}
+
+type alias BlockPosition = {
+  x: Int,
+
+  y: Int,
+
+  z: Int
 }
 
 type alias GameFigure = {

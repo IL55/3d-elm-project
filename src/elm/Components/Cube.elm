@@ -12,7 +12,7 @@ import Math.Matrix4 as Mat4 exposing (Mat4)
 import Math.Vector3 as Vec3 exposing (vec3, Vec3)
 -- import Time exposing (Time)
 import WebGL exposing (Mesh, Shader)
-import Components.Model exposing (Model, Game, GameGlass)
+import Components.Model exposing (Model, Game, GameGlass, BlockPosition)
 import List exposing (map, minimum, maximum)
 import Array exposing (fromList)
 import Maybe exposing (withDefault)
@@ -38,12 +38,17 @@ cube model =
         [ WebGL.entity
             vertexShader
             fragmentShader
-            (cubeMesh model.game.glass)
+            (glassMesh model.game.glass)
             (uniforms model.theta),
           WebGL.entity
             vertexShader
             fragmentShader
             (linesMesh model.game.glass)
+            (uniforms model.theta),
+          WebGL.entity
+            vertexShader
+            fragmentShader
+            (blocksMesh model.game.glass)
             (uniforms model.theta)
         ]
 
@@ -88,6 +93,54 @@ type alias CubeVertexs = {
     lbb: Vec3
 }
 
+translateVertex : BlockPosition -> Float -> Vec3 -> Vec3 -> Vec3
+translateVertex blockPosition blockSize glassCenter v =
+    let
+        x = toFloat(blockPosition.x)
+        y = toFloat(blockPosition.y)
+        z = toFloat(blockPosition.z)
+        move = vec3 x y z
+        m1 = Vec3.scale blockSize move
+
+        vScale = Vec3.scale (blockSize / 2.0) v
+        vSub = Vec3.sub vScale glassCenter
+        vAdd = Vec3.add vSub m1
+
+    in
+        vAdd
+
+
+blockVertexs : BlockPosition -> Float -> Vec3 -> CubeVertexs
+blockVertexs blockPosition blockSize glassCenter =
+    let
+        mv = translateVertex blockPosition blockSize glassCenter
+    in
+    {
+        rft =
+            mv (vec3 1 1 1),
+
+        lft =
+            mv (vec3 -1 1 1),
+
+        lbt =
+            mv (vec3 -1 -1 1),
+
+        rbt =
+            mv (vec3 1 -1 1),
+
+        rbb =
+            mv (vec3 1 -1 -1),
+
+        rfb =
+            mv (vec3 1 1 -1),
+
+        lfb =
+            mv (vec3 -1 1 -1),
+
+        lbb =
+            mv (vec3 -1 -1 -1)
+    }
+
 glassVertexs : GameGlass -> CubeVertexs
 glassVertexs glass =
     let
@@ -121,8 +174,27 @@ glassVertexs glass =
     }
 
 
-cubeMesh : GameGlass -> Mesh Vertex
-cubeMesh glass =
+blocksMesh : GameGlass -> Mesh Vertex
+blocksMesh glass =
+    let
+        block = { x = 0, y = 0, z = 0 }
+        cv = blockVertexs block glass.blockSize glass.center
+
+        faces = [ face Color.green cv.rft cv.rfb cv.rbb cv.rbt
+        , face Color.blue cv.rft cv.rfb cv.lfb cv.lft
+        , face Color.yellow cv.rft cv.lft cv.lbt cv.rbt
+        , face Color.red cv.rfb cv.lfb cv.lbb cv.rbb
+        , face Color.purple cv.lft cv.lfb cv.lbb cv.lbt
+        , face Color.orange cv.rbt cv.rbb cv.lbb cv.lbt
+        ]
+            |> List.concat
+            |> WebGL.triangles
+    in
+        faces
+
+
+glassMesh : GameGlass -> Mesh Vertex
+glassMesh glass =
     let
         cv = glassVertexs glass
 
