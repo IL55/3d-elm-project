@@ -177,7 +177,7 @@ glassVertexs glass =
 blocksMesh : GameGlass -> Mesh Vertex
 blocksMesh glass =
     let
-        block = { x = 0, y = 0, z = 0 }
+        block = { x = 3, y = 3, z = 4 }
         cv = blockVertexs block glass.blockSize glass.center
 
         faces = [ face Color.green cv.rft cv.rfb cv.rbb cv.rbt
