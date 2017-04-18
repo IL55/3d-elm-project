@@ -59,11 +59,11 @@ model = {
         rotation = { x = 1, y = 1, z = 1 }
       },
       blocks = [
+        { x = -1, y = -1, z = 0 },
+        { x = -1, y = 0, z = 0 },
         { x = 0, y = 0, z = 0 },
         { x = 1, y = 0, z = 0 },
-        { x = 2, y = 0, z = 0 },
-        { x = 2, y = 1, z = 0 },
-        { x = 0, y = -1, z = 0 }
+        { x = 1, y = 1, z = 0 }
       ]
     }
   }
@@ -79,6 +79,17 @@ normalizeAngle angle =
     else
       angle
 
+normalizeCoordinate : Int -> Int -> Int
+normalizeCoordinate width x =
+  if x > (width - 1) then
+    width - 1
+  else
+    if x < 0 then
+      0
+    else
+      x
+
+
 -- UPDATE
 type Msg = NoOp |
   Increment |
@@ -92,7 +103,11 @@ type Msg = NoOp |
   IncrementFigureRotateY |
   DecrementFigureRotateY |
   IncrementFigureRotateZ |
-  DecrementFigureRotateZ
+  DecrementFigureRotateZ |
+  IncrementFigureX |
+  DecrementFigureX |
+  IncrementFigureY |
+  DecrementFigureY
 
 update : Msg -> Model -> Model
 update msg model =
@@ -312,6 +327,94 @@ update msg model =
           }
         }
 
+    IncrementFigureX ->
+        let
+          oldGame = model.game
+          oldFigure = oldGame.figure
+          oldPosition = oldFigure.position
+          oldCenter = oldPosition.center
+          width = model.game.glass.width
+          newC = normalizeCoordinate width (oldCenter.x + 1)
+        in
+        { model |
+          game = { oldGame |
+              figure = { oldFigure |
+                position = { oldPosition |
+                  center = { oldCenter |
+                    x = newC
+                  }
+                }
+              }
+
+          }
+        }
+
+    DecrementFigureX ->
+        let
+          oldGame = model.game
+          oldFigure = oldGame.figure
+          oldPosition = oldFigure.position
+          oldCenter = oldPosition.center
+          width = model.game.glass.width
+          newC = normalizeCoordinate width (oldCenter.x - 1)
+        in
+        { model |
+          game = { oldGame |
+              figure = { oldFigure |
+                position = { oldPosition |
+                  center = { oldCenter |
+                    x = newC
+                  }
+                }
+              }
+
+          }
+        }
+
+    IncrementFigureY ->
+        let
+          oldGame = model.game
+          oldFigure = oldGame.figure
+          oldPosition = oldFigure.position
+          oldCenter = oldPosition.center
+          width = model.game.glass.width
+          newC = normalizeCoordinate width (oldCenter.y + 1)
+        in
+        { model |
+          game = { oldGame |
+              figure = { oldFigure |
+                position = { oldPosition |
+                  center = { oldCenter |
+                    y = newC
+                  }
+                }
+              }
+
+          }
+        }
+
+    DecrementFigureY ->
+        let
+          oldGame = model.game
+          oldFigure = oldGame.figure
+          oldPosition = oldFigure.position
+          oldCenter = oldPosition.center
+          width = model.game.glass.width
+          newC = normalizeCoordinate width (oldCenter.y - 1)
+        in
+        { model |
+          game = { oldGame |
+              figure = { oldFigure |
+                position = { oldPosition |
+                  center = { oldCenter |
+                    y = newC
+                  }
+                }
+              }
+
+          }
+        }
+
 -- VIEW
 -- Html is defined as: elem [ attribs ][ children ]
 -- CSS can be applied via class names or inline style attrib
@@ -369,6 +472,21 @@ view model =
           ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureRotateZ ] [                  -- click handler
             span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
             , span[][ text "-1z" ]
+          ]
+          , p [] [ text ( "Move" ) ]
+          , button [ class "btn btn-primary btn-sm", onClick IncrementFigureX ] [                  -- click handler
+            span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
+            , span[][ text "+1x" ]
+          ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureX ] [                  -- click handler
+            span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
+            , span[][ text "-1x" ]
+          ]
+          , button [ class "btn btn-primary btn-sm", onClick IncrementFigureY ] [                  -- click handler
+            span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
+            , span[][ text "+1y" ]
+          ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureY ] [                  -- click handler
+            span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
+            , span[][ text "-1y" ]
           ]
 
         ]
