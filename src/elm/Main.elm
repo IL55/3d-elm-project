@@ -56,18 +56,28 @@ model = {
       figureType = 1,
       position = {
         center = { x = 2, y = 2, z = 2 },
-        rotation = { x = 0, y = 0, z = 0 }
+        rotation = { x = 1, y = 1, z = 1 }
       },
       blocks = [
         { x = 0, y = 0, z = 0 },
         { x = 1, y = 0, z = 0 },
         { x = 2, y = 0, z = 0 },
-        { x = 2, y = 1, z = 0 }
+        { x = 2, y = 1, z = 0 },
+        { x = 0, y = -1, z = 0 }
       ]
     }
   }
  }
 
+normalizeAngle : Int -> Int
+normalizeAngle angle =
+  if angle > 3 then
+    0
+  else
+    if angle < 0 then
+      3
+    else
+      angle
 
 -- UPDATE
 type Msg = NoOp |
@@ -76,7 +86,13 @@ type Msg = NoOp |
   IncrementGlassSize |
   DecrementGlassSize |
   IncrementGlassWidth |
-  DecrementGlassWidth
+  DecrementGlassWidth |
+  IncrementFigureRotateX |
+  DecrementFigureRotateX |
+  IncrementFigureRotateY |
+  DecrementFigureRotateY |
+  IncrementFigureRotateZ |
+  DecrementFigureRotateZ
 
 update : Msg -> Model -> Model
 update msg model =
@@ -170,6 +186,132 @@ update msg model =
           }
         }
 
+    IncrementFigureRotateX ->
+        let
+          oldGame = model.game
+          oldFigure = oldGame.figure
+          oldPosition = oldFigure.position
+          oldRotation = oldPosition.rotation
+          newAng = normalizeAngle (oldRotation.x + 1)
+        in
+        { model |
+          game = { oldGame |
+              figure = { oldFigure |
+                position = { oldPosition |
+                  rotation = { oldRotation |
+                    x = newAng
+                  }
+                }
+              }
+
+          }
+        }
+
+    DecrementFigureRotateX ->
+        let
+          oldGame = model.game
+          oldFigure = oldGame.figure
+          oldPosition = oldFigure.position
+          oldRotation = oldPosition.rotation
+          newAng = normalizeAngle (oldRotation.x - 1)
+        in
+        { model |
+          game = { oldGame |
+              figure = { oldFigure |
+                position = { oldPosition |
+                  rotation = { oldRotation |
+                    x = newAng
+                  }
+                }
+              }
+
+          }
+        }
+
+    IncrementFigureRotateY ->
+        let
+          oldGame = model.game
+          oldFigure = oldGame.figure
+          oldPosition = oldFigure.position
+          oldRotation = oldPosition.rotation
+          newAng = normalizeAngle (oldRotation.y + 1)
+        in
+        { model |
+          game = { oldGame |
+              figure = { oldFigure |
+                position = { oldPosition |
+                  rotation = { oldRotation |
+                    y = newAng
+                  }
+                }
+              }
+
+          }
+        }
+
+    DecrementFigureRotateY ->
+        let
+          oldGame = model.game
+          oldFigure = oldGame.figure
+          oldPosition = oldFigure.position
+          oldRotation = oldPosition.rotation
+          newAng = normalizeAngle (oldRotation.y - 1)
+        in
+        { model |
+          game = { oldGame |
+              figure = { oldFigure |
+                position = { oldPosition |
+                  rotation = { oldRotation |
+                    y = newAng
+                  }
+                }
+              }
+
+          }
+        }
+
+    IncrementFigureRotateZ ->
+        let
+          oldGame = model.game
+          oldFigure = oldGame.figure
+          oldPosition = oldFigure.position
+          oldRotation = oldPosition.rotation
+          newAng = normalizeAngle (oldRotation.z + 1)
+        in
+        { model |
+          game = { oldGame |
+              figure = { oldFigure |
+                position = { oldPosition |
+                  rotation = { oldRotation |
+                    z = newAng
+                  }
+                }
+              }
+
+          }
+        }
+
+    DecrementFigureRotateZ ->
+        let
+          oldGame = model.game
+          oldFigure = oldGame.figure
+          oldPosition = oldFigure.position
+          oldRotation = oldPosition.rotation
+          newAng = normalizeAngle (oldRotation.z - 1)
+        in
+        { model |
+          game = { oldGame |
+              figure = { oldFigure |
+                position = { oldPosition |
+                  rotation = { oldRotation |
+                    z = newAng
+                  }
+                }
+              }
+
+          }
+        }
+
 -- VIEW
 -- Html is defined as: elem [ attribs ][ children ]
 -- CSS can be applied via class names or inline style attrib
@@ -205,6 +347,28 @@ view model =
           ], button [ class "btn btn-primary btn-sm", onClick DecrementGlassWidth ] [                  -- click handler
             span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
             , span[][ text "-1" ]
+          ]
+          , p [] [ text ( "Rotate" ) ]
+          , button [ class "btn btn-primary btn-sm", onClick IncrementFigureRotateX ] [                  -- click handler
+            span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
+            , span[][ text "+1x" ]
+          ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureRotateX ] [                  -- click handler
+            span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
+            , span[][ text "-1x" ]
+          ]
+          , button [ class "btn btn-primary btn-sm", onClick IncrementFigureRotateY ] [                  -- click handler
+            span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
+            , span[][ text "+1y" ]
+          ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureRotateY ] [                  -- click handler
+            span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
+            , span[][ text "-1y" ]
+          ]
+          , button [ class "btn btn-primary btn-sm", onClick IncrementFigureRotateZ ] [                  -- click handler
+            span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
+            , span[][ text "+1z" ]
+          ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureRotateZ ] [                  -- click handler
+            span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
+            , span[][ text "-1z" ]
           ]
 
         ]
