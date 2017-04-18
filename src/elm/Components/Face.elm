@@ -45,3 +45,20 @@ face rawColor a b c d =
         [ ( vertex a, vertex b, vertex c )
         , ( vertex c, vertex d, vertex a )
         ]
+
+faceLines : Vec3 -> Vec3 -> Vec3 -> Vec3 -> List ( Vertex, Vertex )
+faceLines a b c d =
+    let
+        colorLine = vec3 1.0 1.0 1.0
+
+        linePoint position  =
+            Vertex colorLine position
+
+        generalLines = [
+          ( linePoint a, linePoint b )
+        , ( linePoint b, linePoint c )
+        , ( linePoint c, linePoint d )
+        , ( linePoint d, linePoint a )
+        ]
+    in
+        generalLines

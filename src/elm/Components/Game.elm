@@ -1,11 +1,10 @@
-module Components.Cube exposing (..)
+module Components.Game exposing (..)
 
 {-
-  Rotating cube with colored sides.
+  Rotating game with colored sides.
 -}
 
 -- import AnimationFrame
-import Color exposing (Color)
 import Html exposing (Html)
 import Html.Attributes exposing (width, height, style)
 import Math.Matrix4 as Mat4 exposing (Mat4)
@@ -13,11 +12,11 @@ import Math.Vector3 as Vec3 exposing (vec3, Vec3)
 -- import Time exposing (Time)
 import WebGL exposing (Mesh, Shader)
 import Components.Model exposing (Model, Game, GameGlass, BlockPosition)
-import List exposing (map, minimum, maximum)
 
 import Components.Glass exposing (..)
 import Components.Vertex exposing (..)
 import Components.Block exposing (..)
+import Components.Figure exposing (..)
 
 
 -- cube : Float -> Html Time
@@ -30,8 +29,8 @@ import Components.Block exposing (..)
 --  }
 
 
-cube : Model -> Html a
-cube model =
+game : Model -> Html a
+game model =
   WebGL.toHtml
   [ width model.game.view.width
   , height model.game.view.height
@@ -45,12 +44,12 @@ cube model =
     WebGL.entity
       vertexShader
       fragmentShader
-      (linesMesh model.game.glass)
+      (linesMesh model.game)
       (uniforms model.theta),
     WebGL.entity
       vertexShader
       fragmentShader
-      (blocksMesh model.game.glass)
+      (blocksMesh model.game)
       (uniforms model.theta)
   ]
 
@@ -78,13 +77,15 @@ uniforms theta =
 
 -- Mesh
 
-blocksMesh : GameGlass -> Mesh Vertex
-blocksMesh glass =
+blocksMesh : Game -> Mesh Vertex
+blocksMesh game =
   let
-    faces = blocksFaces glass
-      |> WebGL.triangles
+    ffaces = figureFaces game.glass game.figure
+    faces = blocksFaces game.glass game.blocks
   in
-    faces
+    [faces, ffaces]
+      |> List.concat
+      |> WebGL.triangles
 
 
 glassMesh : GameGlass -> Mesh Vertex
@@ -95,13 +96,16 @@ glassMesh glass =
   in
     faces
 
-linesMesh : GameGlass -> Mesh Vertex
-linesMesh glass =
+linesMesh : Game -> Mesh Vertex
+linesMesh game =
   let
-    lines = glassLines glass
-      |> WebGL.lines
+    lines = glassLines game.glass
+    blines = blocksLines game.glass game.blocks
+    flines = figureLines game.glass game.figure
   in
-    lines
+    [lines, blines, flines]
+      |> List.concat
+      |> WebGL.lines
 
 
 -- Shaders

@@ -8,7 +8,7 @@ import Math.Vector3 as Vec3 exposing (vec3, Vec3)
 
 import Components.Model exposing ( Model, Game, GameGlass )
 import Components.Hello exposing ( hello )
-import Components.Cube exposing ( cube )
+import Components.Game exposing ( game )
 
 -- define port
 port showPortName : String -> Cmd msg
@@ -47,15 +47,23 @@ model = {
         blockSize = bs,
         center = vec3 (w2 * bs - bs2) (w2 * bs - bs2) (-1.0 * bs2)
     },
-    -- blocks = [],
+    blocks = [
+      { x = 0, y = 0, z = 0 },
+      { x = 3, y = 3, z = 4 },
+      { x = 5, y = 5, z = 7 }
+    ],
     figure = {
-      figureType = 0,
+      figureType = 1,
       position = {
-        depth = 0,
-        rotationX = 0,
-        rotationY = 0,
-        rotationZ = 0
-      }
+        center = { x = 2, y = 2, z = 2 },
+        rotation = { x = 0, y = 0, z = 0 }
+      },
+      blocks = [
+        { x = 0, y = 0, z = 0 },
+        { x = 1, y = 0, z = 0 },
+        { x = 2, y = 0, z = 0 },
+        { x = 2, y = 1, z = 0 }
+      ]
     }
   }
  }
@@ -171,7 +179,7 @@ view model =
     div [ class "row" ][
       div [ class "col-xs-12" ][
         div [ class "jumbotron" ][
-          cube model
+          game model
           , hello model.number                                                              -- ext 'hello' component (takes 'model' as arg)
           , p [] [ text ( "Angle" ) ]
           , button [ class "btn btn-primary btn-sm", onClick Increment ] [                  -- click handler

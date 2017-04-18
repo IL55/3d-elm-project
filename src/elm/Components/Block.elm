@@ -71,18 +71,35 @@ blockFaces glass block color =
     in
         faces
 
-blocksFaces : GameGlass -> List ( Vertex, Vertex, Vertex )
-blocksFaces glass =
+blocksFaces : GameGlass -> List ( BlockPosition ) -> List ( Vertex, Vertex, Vertex )
+blocksFaces glass blocks =
   let
-    block0 = { x = 0, y = 0, z = 0 }
-    block1 = { x = 3, y = 3, z = 4 }
-    block2 = { x = glass.width - 1, y = glass.width - 1, z = glass.depth - 1 }
+    faces = List.map (\ block -> blockFaces glass block Color.green) blocks
+      |> List.concat
+  in
+    faces
 
-    faces0 = blockFaces glass block0 Color.green
-    faces1 = blockFaces glass block1 Color.blue
-    faces2 = blockFaces glass block2 Color.red
+blockLines : GameGlass -> BlockPosition -> List ( Vertex, Vertex )
+blockLines glass block =
+  let
+    cv = blockVertexs block glass.blockSize glass.center
 
-    faces = [ faces0, faces1, faces2 ]
+    lines = [
+      faceLines cv.rft cv.rfb cv.rbb cv.rbt
+    , faceLines cv.rft cv.rfb cv.lfb cv.lft
+    , faceLines cv.rft cv.lft cv.lbt cv.rbt
+    , faceLines cv.rfb cv.lfb cv.lbb cv.rbb
+    , faceLines cv.lft cv.lfb cv.lbb cv.lbt
+    , faceLines cv.rbt cv.rbb cv.lbb cv.lbt
+    ]
+      |> List.concat
+  in
+    lines
+
+blocksLines : GameGlass -> List ( BlockPosition ) -> List ( Vertex, Vertex )
+blocksLines glass blocks =
+  let
+    faces = List.map (\ block -> blockLines glass block) blocks
       |> List.concat
   in
     faces

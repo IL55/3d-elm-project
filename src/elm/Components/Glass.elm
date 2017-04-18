@@ -10,8 +10,8 @@ import Color exposing (Color)
 import Components.Vertex exposing (..)
 import Components.Face exposing (..)
 
-faceLines : GameGlass -> Color -> Vec3 -> Vec3 -> Vec3 -> Vec3 -> List ( Vertex, Vertex )
-faceLines glass rawColor a b c d =
+faceLinesWithMiddleLines : GameGlass -> Color -> Vec3 -> Vec3 -> Vec3 -> Vec3 -> List ( Vertex, Vertex )
+faceLinesWithMiddleLines glass rawColor a b c d =
     let
         color =
             let
@@ -168,12 +168,12 @@ glassLines glass =
   let
     cv = glassVertexs glass
 
-    lines = [ faceLines glass Color.green cv.rft cv.rfb cv.rbb cv.rbt
-    , faceLines glass Color.blue cv.rft cv.rfb cv.lfb cv.lft
-    , faceLines glass Color.yellow cv.rft cv.lft cv.lbt cv.rbt
-    --, faceLines glass Color.red cv.rfb cv.lfb cv.lbb cv.rbb
-    , faceLines glass Color.purple cv.lft cv.lfb cv.lbb cv.lbt
-    , faceLines glass Color.orange cv.rbt cv.rbb cv.lbb cv.lbt
+    lines = [ faceLinesWithMiddleLines glass Color.green cv.rft cv.rfb cv.rbb cv.rbt
+    , faceLinesWithMiddleLines glass Color.blue cv.rft cv.rfb cv.lfb cv.lft
+    , faceLinesWithMiddleLines glass Color.yellow cv.rft cv.lft cv.lbt cv.rbt
+    --, faceLinesWithMiddleLines glass Color.red cv.rfb cv.lfb cv.lbb cv.rbb
+    , faceLinesWithMiddleLines glass Color.purple cv.lft cv.lfb cv.lbb cv.lbt
+    , faceLinesWithMiddleLines glass Color.orange cv.rbt cv.rbb cv.lbb cv.lbt
     ]
       |> List.concat
   in
