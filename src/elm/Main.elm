@@ -19,6 +19,21 @@ main : Program Never Model Msg
 main =
   Html.beginnerProgram { model = model, view = view, update = update }
 
+calculateSizes : Int -> Int -> GameGlass
+calculateSizes d w =
+  let
+    bs = 2.0 / toFloat(w)
+
+    w2 = toFloat(w) / 2.0
+    bs2 = bs / 2.0
+  in
+  {
+    depth = d,
+    width = w,
+
+    blockSize = bs,
+    center = vec3 (w2 * bs - bs2) (w2 * bs - bs2) (-1.0 * bs2)
+  }
 
 model : Model
 model = {
@@ -31,22 +46,7 @@ model = {
       width = 400,
       height = 400
     },
-    glass =
-      let
-        d = 8
-        w = 6
-        bs = 2.0 / toFloat(w)
-
-        w2 = toFloat(w) / 2.0
-        bs2 = bs / 2.0
-      in
-      {
-        depth = d,
-        width = w,
-
-        blockSize = bs,
-        center = vec3 (w2 * bs - bs2) (w2 * bs - bs2) (-1.0 * bs2)
-    },
+    glass = calculateSizes 8 6,
     blocks = [
       { x = 0, y = 0, z = 0 },
       { x = 3, y = 3, z = 4 },
@@ -145,12 +145,16 @@ update msg model =
         let
           oldGame = model.game
           oldGlass = oldGame.glass
+          newDepth = oldGlass.depth + 1
+          newGlass = calculateSizes newDepth oldGlass.width
         in
         { model |
           game = { oldGame |
               glass = {
                 oldGlass |
-                  depth = oldGlass.depth + 1
+                  depth = newDepth,
+                  blockSize = newGlass.blockSize,
+                  center = newGlass.center
               }
 
           }
@@ -160,12 +164,16 @@ update msg model =
         let
           oldGame = model.game
           oldGlass = oldGame.glass
+          newDepth = oldGlass.depth - 1
+          newGlass = calculateSizes newDepth oldGlass.width
         in
         { model |
           game = { oldGame |
               glass = {
                 oldGlass |
-                  depth = oldGlass.depth - 1
+                  depth = newDepth,
+                  blockSize = newGlass.blockSize,
+                  center = newGlass.center
               }
 
           }
@@ -175,12 +183,16 @@ update msg model =
         let
           oldGame = model.game
           oldGlass = oldGame.glass
+          newWidth = oldGlass.width + 1
+          newGlass = calculateSizes oldGlass.depth newWidth
         in
         { model |
           game = { oldGame |
               glass = {
                 oldGlass |
-                  width = oldGlass.width + 1
+                  width = newWidth,
+                  blockSize = newGlass.blockSize,
+                  center = newGlass.center
               }
 
           }
@@ -190,12 +202,16 @@ update msg model =
         let
           oldGame = model.game
           oldGlass = oldGame.glass
+          newWidth = oldGlass.width - 1
+          newGlass = calculateSizes oldGlass.depth newWidth
         in
         { model |
           game = { oldGame |
               glass = {
                 oldGlass |
-                  width = oldGlass.width - 1
+                  width = newWidth,
+                  blockSize = newGlass.blockSize,
+                  center = newGlass.center
               }
 
           }
