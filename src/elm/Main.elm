@@ -2,13 +2,13 @@ port module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick )
-import Math.Vector3 as Vec3 exposing (vec3, Vec3)
 
 -- component import example
 
 import Components.Model exposing ( Model, Game, GameGlass )
 import Components.Hello exposing ( hello )
 import Components.Game exposing ( game )
+import Components.ChangeGlassSize exposing (..)
 
 -- define port
 port showPortName : String -> Cmd msg
@@ -18,22 +18,6 @@ port showPortName : String -> Cmd msg
 main : Program Never Model Msg
 main =
   Html.beginnerProgram { model = model, view = view, update = update }
-
-calculateSizes : Int -> Int -> GameGlass
-calculateSizes d w =
-  let
-    bs = 2.0 / toFloat(w)
-
-    w2 = toFloat(w) / 2.0
-    bs2 = bs / 2.0
-  in
-  {
-    depth = d,
-    width = w,
-
-    blockSize = bs,
-    center = vec3 (w2 * bs - bs2) (w2 * bs - bs2) (-1.0 * bs2)
-  }
 
 model : Model
 model = {
@@ -94,10 +78,10 @@ normalizeCoordinate width x =
 type Msg = NoOp |
   Increment |
   Decrement |
-  IncrementGlassSize |
-  DecrementGlassSize |
-  IncrementGlassWidth |
-  DecrementGlassWidth |
+  IncrementGlassSizeMsg |
+  DecrementGlassSizeMsg |
+  IncrementGlassWidthMsg |
+  DecrementGlassWidthMsg |
   IncrementFigureRotateX |
   DecrementFigureRotateX |
   IncrementFigureRotateY |
@@ -141,81 +125,17 @@ update msg model =
                         theta = model.theta + 0.1
                     }
 
-    IncrementGlassSize ->
-        let
-          oldGame = model.game
-          oldGlass = oldGame.glass
-          newDepth = oldGlass.depth + 1
-          newGlass = calculateSizes newDepth oldGlass.width
-        in
-        { model |
-          game = { oldGame |
-              glass = {
-                oldGlass |
-                  depth = newDepth,
-                  blockSize = newGlass.blockSize,
-                  center = newGlass.center
-              }
+    IncrementGlassSizeMsg ->
+      incrementGlassSize model
 
-          }
-        }
+    DecrementGlassSizeMsg ->
+      decrementGlassSize model
 
-    DecrementGlassSize ->
-        let
-          oldGame = model.game
-          oldGlass = oldGame.glass
-          newDepth = oldGlass.depth - 1
-          newGlass = calculateSizes newDepth oldGlass.width
-        in
-        { model |
-          game = { oldGame |
-              glass = {
-                oldGlass |
-                  depth = newDepth,
-                  blockSize = newGlass.blockSize,
-                  center = newGlass.center
-              }
+    IncrementGlassWidthMsg ->
+      incrementGlassWidth model
 
-          }
-        }
-
-    IncrementGlassWidth ->
-        let
-          oldGame = model.game
-          oldGlass = oldGame.glass
-          newWidth = oldGlass.width + 1
-          newGlass = calculateSizes oldGlass.depth newWidth
-        in
-        { model |
-          game = { oldGame |
-              glass = {
-                oldGlass |
-                  width = newWidth,
-                  blockSize = newGlass.blockSize,
-                  center = newGlass.center
-              }
-
-          }
-        }
-
-    DecrementGlassWidth ->
-        let
-          oldGame = model.game
-          oldGlass = oldGame.glass
-          newWidth = oldGlass.width - 1
-          newGlass = calculateSizes oldGlass.depth newWidth
-        in
-        { model |
-          game = { oldGame |
-              glass = {
-                oldGlass |
-                  width = newWidth,
-                  blockSize = newGlass.blockSize,
-                  center = newGlass.center
-              }
-
-          }
-        }
+    DecrementGlassWidthMsg ->
+      decrementGlassWidth model
 
     IncrementFigureRotateX ->
         let
@@ -452,18 +372,18 @@ view model =
               , span[][ text "-1" ]
           ]
           , p [] [ text ( "Depth" ) ]
-          , button [ class "btn btn-primary btn-sm", onClick IncrementGlassSize ] [                  -- click handler
+          , button [ class "btn btn-primary btn-sm", onClick IncrementGlassSizeMsg ] [                  -- click handler
             span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
             , span[][ text "+1" ]
-          ], button [ class "btn btn-primary btn-sm", onClick DecrementGlassSize ] [                  -- click handler
+          ], button [ class "btn btn-primary btn-sm", onClick DecrementGlassSizeMsg ] [                  -- click handler
             span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
             , span[][ text "-1" ]
           ]
           , p [] [ text ( "Width" ) ]
-          , button [ class "btn btn-primary btn-sm", onClick IncrementGlassWidth ] [                  -- click handler
+          , button [ class "btn btn-primary btn-sm", onClick IncrementGlassWidthMsg ] [                  -- click handler
             span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
             , span[][ text "+1" ]
-          ], button [ class "btn btn-primary btn-sm", onClick DecrementGlassWidth ] [                  -- click handler
+          ], button [ class "btn btn-primary btn-sm", onClick DecrementGlassWidthMsg ] [                  -- click handler
             span[ class "glyphicon glyphicon-star" ][]                                      -- glyphicon
             , span[][ text "-1" ]
           ]
