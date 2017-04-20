@@ -11,6 +11,7 @@ import Components.Game exposing ( game )
 import Components.ChangeGlassSize exposing (..)
 import Components.ChangeFigurePosition exposing (..)
 import Components.AddFigureToGlass exposing (..)
+import Random exposing (..)
 
 -- define port
 port showPortName : String -> Cmd msg
@@ -23,6 +24,7 @@ main =
 
 model : Model
 model = {
+  seed = Random.initialSeed 31,
   style = "Blue",
   number = 1,
   isCool = True,
@@ -32,12 +34,8 @@ model = {
       width = 400,
       height = 400
     },
-    glass = calculateSizes 8 6,
-    blocks = [
-      { x = 0, y = 0, z = 0 },
-      { x = 3, y = 3, z = 4 },
-      { x = 5, y = 5, z = 7 }
-    ],
+    glass = calculateSizes 20 10,
+    blocks = [],
     figure = {
       figureType = 1,
       position = {

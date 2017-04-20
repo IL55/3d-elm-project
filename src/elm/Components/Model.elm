@@ -1,6 +1,7 @@
 module Components.Model exposing (..)
 
 import Math.Vector3 as Vec3 exposing (vec3, Vec3)
+import Random exposing (..)
 
 -- definition of glass
 type alias GameGlass = {
@@ -66,6 +67,7 @@ type alias Game = {
 
 -- MODEL
 type alias Model = {
+  seed: Random.Seed,
   style: String,
   number: Int,
   isCool: Bool,

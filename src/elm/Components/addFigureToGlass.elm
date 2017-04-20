@@ -3,6 +3,7 @@ module Components.AddFigureToGlass exposing (..)
 import Components.Model exposing ( Model, GameGlass, BlockPosition )
 import Components.Figure exposing ( convertToBlocks )
 import Components.ChangeFigurePosition exposing ( incrementFigureCenterZ )
+import Components.FiguresList exposing ( getNextFigure )
 
 addFigureToGlass : Model -> Model
 addFigureToGlass model =
@@ -16,9 +17,14 @@ addFigureToGlass model =
 
     newBlocks = List.concat [blocks, figureBlocks]
 
+    -- get next random figure
+    (newFigure, newSeed) = getNextFigure model.seed oldGame.glass.width
+
     changedModel = { modelMoved |
+      seed = newSeed,
       game = { oldGame |
-        blocks = newBlocks
+        blocks = newBlocks,
+        figure = newFigure
       }
     }
   in
