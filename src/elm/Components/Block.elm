@@ -1,6 +1,7 @@
 module Components.Block exposing (..)
 import Math.Vector3 as Vec3 exposing (vec3, Vec3)
 import Color exposing (Color)
+import List.Extra exposing ( groupWhile )
 
 import Components.Model exposing (Model, Game, GameGlass, BlockPosition)
 import Components.Vertex exposing (..)
@@ -71,10 +72,43 @@ blockFaces glass block color =
     in
         faces
 
+getColorByDepth : Int -> Color
+getColorByDepth z =
+    let
+        c = rem z 10
+    in
+        case c of
+            0 -> Color.blue
+
+            1 -> Color.orange
+
+            2 -> Color.yellow
+
+            3 -> Color.green
+
+            4 -> Color.purple
+
+            5 -> Color.darkGreen
+
+            6 -> Color.red
+
+            7 -> Color.darkBlue
+
+            8 -> Color.charcoal
+
+            9 -> Color.darkPurple
+
+            _ -> Color.blue
+
 blocksFaces : GameGlass -> List ( BlockPosition ) -> List ( Vertex, Vertex, Vertex )
 blocksFaces glass blocks =
   let
-    faces = List.map (\ block -> blockFaces glass block Color.green) blocks
+    groups = groupWhile (\ a b -> a.z == b.z ) blocks
+    groupsFaces = List.map (\ group ->
+        (List.map (\ block -> blockFaces glass block (getColorByDepth block.z)) group)
+    ) groups
+      |> List.concat
+    faces = groupsFaces
       |> List.concat
   in
     faces
