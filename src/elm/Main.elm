@@ -10,6 +10,7 @@ import Components.Hello exposing ( hello )
 import Components.Game exposing ( game )
 import Components.ChangeGlassSize exposing (..)
 import Components.ChangeFigurePosition exposing (..)
+import Components.AddFigureToGlass exposing (..)
 
 -- define port
 port showPortName : String -> Cmd msg
@@ -73,7 +74,8 @@ type Msg = NoOp |
   IncrementFigureCenterYMsg |
   DecrementFigureCenterYMsg |
   IncrementFigureCenterZMsg |
-  DecrementFigureCenterZMsg
+  DecrementFigureCenterZMsg |
+  AddFigureToGlassMsg
 
 update : Msg -> Model -> Model
 update msg model =
@@ -83,29 +85,17 @@ update msg model =
   case msg of
     NoOp -> model
 
-    Increment ->  if model.number < 3 then
-                    {
-                      model |
-                        number = model.number + 1,
-                        theta = model.theta + 0.1
-                    }
-                  else
-                    {
-                      model |
-                        theta = model.theta + 0.1
-                    }
+    Increment ->
+      {
+        model |
+          theta = model.theta + 0.1
+      }
 
-    Decrement ->  if model.number > 0 then
-                    {
-                      model |
-                        number = model.number - 1,
-                        theta = model.theta - 0.1
-                    }
-                  else
-                    {
-                      model |
-                        theta = model.theta + 0.1
-                    }
+    Decrement ->
+      {
+        model |
+          theta = model.theta - 0.1
+      }
 
     IncrementGlassSizeMsg ->
       incrementGlassSize model
@@ -155,6 +145,8 @@ update msg model =
     DecrementFigureCenterZMsg ->
       decrementFigureCenterZ model
 
+    AddFigureToGlassMsg ->
+      addFigureToGlass model
 
 -- VIEW
 -- Html is defined as: elem [ attribs ][ children ]
@@ -235,6 +227,11 @@ view model =
           ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureCenterZMsg ] [
             span[ class "glyphicon glyphicon-star" ][]
             , span[][ text "-1z" ]
+          ]
+          , p [] [ text ( "Add" ) ]
+          , button [ class "btn btn-primary btn-sm", onClick AddFigureToGlassMsg ] [
+            span[ class "glyphicon glyphicon-star" ][]
+            , span[][ text "add" ]
           ]
 
         ]
