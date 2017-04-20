@@ -34,20 +34,16 @@ model = {
       width = 400,
       height = 400
     },
-    glass = calculateSizes 20 10,
+    glass = calculateSizes 10 8,
     blocks = [],
     figure = {
       figureType = 1,
       position = {
-        center = { x = 2, y = 2, z = 2 },
-        rotation = { x = 1, y = 1, z = 1 }
+        center = { x = 0, y = 0, z = 0 },
+        rotation = { x = 0, y = 0, z = 0 }
       },
       blocks = [
-        { x = -1, y = -1, z = 0 },
-        { x = -1, y = 0, z = 0 },
-        { x = 0, y = 0, z = 0 },
-        { x = 1, y = 0, z = 0 },
-        { x = 1, y = 1, z = 0 }
+        { x = 0, y = 0, z = 0 }
       ]
     }
   }
@@ -155,81 +151,87 @@ view model =
     div [ class "row" ][
       div [ class "col-xs-12" ][
         div [ class "jumbotron" ][
-          game model
-          , hello model.number                                                              -- ext 'hello' component (takes 'model' as arg)
-          , p [] [ text ( "Angle" ) ]
-          , button [ class "btn btn-primary btn-sm", onClick Increment ] [
-            span[ class "glyphicon glyphicon-star" ][]
-            , span[][ text "+1" ]
+          hello model.number
+          , game model
+          , p [] [
+            text ( "Angle" )
+            , button [ class "btn btn-primary btn-sm", onClick Increment ] [
+              span[ class "glyphicon" ][]
+              , span[][ text "+1" ]
+            ]
+            , button [ class "btn btn-primary btn-sm", onClick Decrement ] [
+              span[ class "glyphicon" ][]
+                , span[][ text "-1" ]
+            ]
           ]
-          , button [ class "btn btn-primary btn-sm", onClick Decrement ] [
-            span[ class "glyphicon glyphicon-star" ][]
+          , p [] [
+            text ( "Depth" )
+            , button [ class "btn btn-primary btn-sm", onClick IncrementGlassSizeMsg ] [
+              span[ class "glyphicon" ][]
+              , span[][ text "+1" ]
+            ], button [ class "btn btn-primary btn-sm", onClick DecrementGlassSizeMsg ] [
+              span[ class "glyphicon" ][]
               , span[][ text "-1" ]
+            ]
           ]
-          , p [] [ text ( "Depth" ) ]
-          , button [ class "btn btn-primary btn-sm", onClick IncrementGlassSizeMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
-            , span[][ text "+1" ]
-          ], button [ class "btn btn-primary btn-sm", onClick DecrementGlassSizeMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
-            , span[][ text "-1" ]
-          ]
-          , p [] [ text ( "Width" ) ]
-          , button [ class "btn btn-primary btn-sm", onClick IncrementGlassWidthMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
-            , span[][ text "+1" ]
-          ], button [ class "btn btn-primary btn-sm", onClick DecrementGlassWidthMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
-            , span[][ text "-1" ]
+          , p [] [
+            text ( "Width" )
+            , button [ class "btn btn-primary btn-sm", onClick IncrementGlassWidthMsg ] [
+              span[ class "glyphicon" ][]
+              , span[][ text "+1" ]
+            ], button [ class "btn btn-primary btn-sm", onClick DecrementGlassWidthMsg ] [
+              span[ class "glyphicon" ][]
+              , span[][ text "-1" ]
+            ]
           ]
           , p [] [ text ( "Rotate" ) ]
           , button [ class "btn btn-primary btn-sm", onClick IncrementFigureRotateXMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "+1x" ]
           ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureRotateXMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "-1x" ]
           ]
           , button [ class "btn btn-primary btn-sm", onClick IncrementFigureRotateYMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "+1y" ]
           ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureRotateYMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "-1y" ]
           ]
           , button [ class "btn btn-primary btn-sm", onClick IncrementFigureRotateZMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "+1z" ]
           ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureRotateZMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "-1z" ]
           ]
           , p [] [ text ( "Move" ) ]
           , button [ class "btn btn-primary btn-sm", onClick IncrementFigureCenterXMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "+1x" ]
           ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureCenterXMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "-1x" ]
           ]
           , button [ class "btn btn-primary btn-sm", onClick IncrementFigureCenterYMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "+1y" ]
           ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureCenterYMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "-1y" ]
           ]
           , button [ class "btn btn-primary btn-sm", onClick IncrementFigureCenterZMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "+1z" ]
           ], button [ class "btn btn-primary btn-sm", onClick DecrementFigureCenterZMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
+            span[ class "glyphicon" ][]
             , span[][ text "-1z" ]
           ]
-          , p [] [ text ( "Add" ) ]
+          , p [] []
           , button [ class "btn btn-primary btn-sm", onClick AddFigureToGlassMsg ] [
-            span[ class "glyphicon glyphicon-star" ][]
-            , span[][ text "add" ]
+            span[ class "glyphicon" ][]
+            , span[][ text "Add" ]
           ]
 
         ]

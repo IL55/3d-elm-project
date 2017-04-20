@@ -12,12 +12,12 @@ translateVertex blockPosition blockSize glassCenter v =
         x = toFloat(blockPosition.x)
         y = toFloat(blockPosition.y)
         z = toFloat(blockPosition.z)
-        move = vec3 x y z
-        m1 = Vec3.scale blockSize move
 
-        vScale = Vec3.scale (blockSize / 2.0) v
-        vSub = Vec3.sub vScale glassCenter
-        vAdd = Vec3.add vSub m1
+        vBlockCenter = Vec3.scale blockSize (vec3 x y z)
+
+        vLocalVertex = Vec3.scale (blockSize / 2.0) v
+        vSub = Vec3.sub vLocalVertex glassCenter
+        vAdd = Vec3.add vSub vBlockCenter
 
     in
         vAdd

@@ -31,16 +31,12 @@ import Components.Figure exposing (..)
 
 game : Model -> Html a
 game model =
-  WebGL.toHtml
+  WebGL.toHtmlWith [ WebGL.alpha True, WebGL.antialias, WebGL.depth 1 ]
   [ width model.game.view.width
   , height model.game.view.height
   , style [ ( "display", "block" ) ]
   ]
-  [ WebGL.entity
-      vertexShader
-      fragmentShader
-      (glassMesh model.game.glass)
-      (uniforms model.theta),
+  [
     WebGL.entity
       vertexShader
       fragmentShader
@@ -50,6 +46,11 @@ game model =
       vertexShader
       fragmentShader
       (blocksMesh model.game)
+      (uniforms model.theta),
+    WebGL.entity
+      vertexShader
+      glassFragmentShader
+      (glassMesh model.game.glass)
       (uniforms model.theta)
   ]
 
@@ -135,5 +136,18 @@ fragmentShader =
     varying vec3 vcolor;
     void main () {
       gl_FragColor = shade * vec4(vcolor, 1.0);
+    }
+  |]
+
+glassFragmentShader : Shader {} Uniforms { vcolor : Vec3 }
+glassFragmentShader =
+  [glsl|
+    precision mediump float;
+    uniform float shade;
+    varying vec3 vcolor;
+    void main () {
+      gl_FragColor = shade * vec4(vcolor, 1.0);
+      if(gl_FragColor.a < 0.5)
+        discard;
     }
   |]

@@ -118,33 +118,33 @@ faceLinesWithMiddleLines glass rawColor a b c d =
 glassVertexs : GameGlass -> CubeVertexs
 glassVertexs glass =
     let
-        sizeX = 2.0 / toFloat(glass.width)
-        depth = 2.0 + sizeX * toFloat(glass.depth - glass.width)
+        w2 = toFloat(glass.width) * glass.blockSize / 2.0
+        depth = toFloat(glass.depth) * glass.blockSize
     in
     {
         rft =
-            vec3 1 1 depth,
+            vec3 w2 w2 depth,
 
         lft =
-            vec3 -1 1 depth,
+            vec3 -w2 w2 depth,
 
         lbt =
-            vec3 -1 -1 depth,
+            vec3 -w2 -w2 depth,
 
         rbt =
-            vec3 1 -1 depth,
+            vec3 w2 -w2 depth,
 
         rbb =
-            vec3 1 -1 0,
+            vec3 w2 -w2 0,
 
         rfb =
-            vec3 1 1 0,
+            vec3 w2 w2 0,
 
         lfb =
-            vec3 -1 1 0,
+            vec3 -w2 w2 0,
 
         lbb =
-            vec3 -1 -1 0
+            vec3 -w2 -w2 0
     }
 
 glassFaces : GameGlass -> List ( Vertex, Vertex, Vertex )

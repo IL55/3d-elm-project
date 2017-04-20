@@ -6,7 +6,7 @@ import Math.Vector3 as Vec3 exposing (vec3, Vec3)
 calculateSizes : Int -> Int -> GameGlass
 calculateSizes d w =
   let
-    viewSize = 2.0
+    viewSize = 3.0
     bs = viewSize / toFloat(w)
 
     w2 = toFloat(w) / 2.0
