@@ -2,6 +2,8 @@ port module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick )
+import Keyboard exposing (..)
+import Json.Decode
 
 -- component import example
 
@@ -12,15 +14,26 @@ import Components.ChangeGlassSize exposing (..)
 import Components.ChangeFigurePosition exposing (..)
 import Components.AddFigureToGlass exposing (..)
 import Random exposing (..)
+import Components.KeyPress exposing ( processKeyPress )
 
 -- define port
 port showPortName : String -> Cmd msg
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.batch
+        [ Keyboard.downs KeyMsg ]
 
 
 -- APP
 main : Program Never Model Msg
 main =
-  Html.beginnerProgram { model = model, view = view, update = update }
+  program {
+    init = init,
+    view = view,
+    update = update,
+    subscriptions = subscriptions
+  }
 
 model : Model
 model = {
@@ -34,7 +47,7 @@ model = {
       width = 400,
       height = 400
     },
-    glass = calculateSizes 10 8,
+    glass = calculateSizes 10 4,
     blocks = [],
     figure = {
       figureType = 1,
@@ -48,6 +61,10 @@ model = {
     }
   }
  }
+
+init : ( Model, Cmd msg )
+init =
+    ( model, Cmd.none )
 
 -- UPDATE
 type Msg = NoOp |
@@ -69,85 +86,89 @@ type Msg = NoOp |
   DecrementFigureCenterYMsg |
   IncrementFigureCenterZMsg |
   DecrementFigureCenterZMsg |
-  AddFigureToGlassMsg
+  AddFigureToGlassMsg |
+  KeyMsg Keyboard.KeyCode
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> (Model, Cmd msg)
 update msg model =
   let
     _ = Debug.log "yo" model
   in
   case msg of
-    NoOp -> model
+    NoOp -> ( model, Cmd.none )
 
     Increment ->
-      {
+      ({
         model |
           theta = model.theta + 0.1
-      }
+      }, Cmd.none)
 
     Decrement ->
-      {
+      ( {
         model |
           theta = model.theta - 0.1
-      }
+      }, Cmd.none )
 
     IncrementGlassSizeMsg ->
-      incrementGlassSize model
+      ( incrementGlassSize model, Cmd.none )
 
     DecrementGlassSizeMsg ->
-      decrementGlassSize model
+      ( decrementGlassSize model, Cmd.none )
 
     IncrementGlassWidthMsg ->
-      incrementGlassWidth model
+      ( incrementGlassWidth model, Cmd.none )
 
     DecrementGlassWidthMsg ->
-      decrementGlassWidth model
+      ( decrementGlassWidth model, Cmd.none )
 
     IncrementFigureRotateXMsg ->
-      incrementFigureRotateX model
+      ( incrementFigureRotateX model, Cmd.none )
 
     DecrementFigureRotateXMsg ->
-      decrementFigureRotateX model
+      ( decrementFigureRotateX model, Cmd.none )
 
     IncrementFigureRotateYMsg ->
-      incrementFigureRotateY model
+      ( incrementFigureRotateY model, Cmd.none )
 
     DecrementFigureRotateYMsg ->
-      decrementFigureRotateY model
+      ( decrementFigureRotateY model, Cmd.none )
 
     IncrementFigureRotateZMsg ->
-      incrementFigureRotateZ model
+      ( incrementFigureRotateZ model, Cmd.none )
 
     DecrementFigureRotateZMsg ->
-      decrementFigureRotateZ model
+      ( decrementFigureRotateZ model, Cmd.none )
 
     IncrementFigureCenterXMsg ->
-      incrementFigureCenterX model
+      ( incrementFigureCenterX model, Cmd.none )
 
     DecrementFigureCenterXMsg ->
-      decrementFigureCenterX model
+      ( decrementFigureCenterX model, Cmd.none )
 
     IncrementFigureCenterYMsg ->
-      incrementFigureCenterY model
+      ( incrementFigureCenterY model, Cmd.none )
 
     DecrementFigureCenterYMsg ->
-      decrementFigureCenterY model
+      ( decrementFigureCenterY model, Cmd.none )
 
     IncrementFigureCenterZMsg ->
-      incrementFigureCenterZ model
+      ( incrementFigureCenterZ model, Cmd.none )
 
     DecrementFigureCenterZMsg ->
-      decrementFigureCenterZ model
+      ( decrementFigureCenterZ model, Cmd.none )
 
     AddFigureToGlassMsg ->
-      addFigureToGlass model
+      ( addFigureToGlass model, Cmd.none )
+
+    KeyMsg code ->
+      ( processKeyPress model code, Cmd.none )
 
 -- VIEW
 -- Html is defined as: elem [ attribs ][ children ]
 -- CSS can be applied via class names or inline style attrib
 view : Model -> Html Msg
 view model =
-  div [ class "container", style [("margin-top", "30px"), ( "text-align", "center" )] ][    -- inline CSS (literal)
+  div [ class "container", style [("margin-top", "30px"), ( "text-align", "center" )]][
     div [ class "row" ][
       div [ class "col-xs-12" ][
         div [ class "jumbotron" ][
@@ -228,7 +249,6 @@ view model =
             span[ class "glyphicon" ][]
             , span[][ text "-1z" ]
           ]
-          , p [] []
           , button [ class "btn btn-primary btn-sm", onClick AddFigureToGlassMsg ] [
             span[ class "glyphicon" ][]
             , span[][ text "Add" ]
