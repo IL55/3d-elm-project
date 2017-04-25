@@ -17,7 +17,7 @@ test:
     - sed -i -r '/^dist\/?\s*$/d' .gitignore
     - git config user.name "igor@salsitasoft.com"
     - git config user.email "igor@salsitasoft.com"
-    - git checkout gh-pages
+    - git checkout -b gh-pages
     - git --no-pager diff .gitignore
     - git status
     - git add -A
