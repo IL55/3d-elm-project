@@ -6,6 +6,7 @@ import Components.ChangeFigurePosition exposing ( incrementFigureCenterZ )
 import Components.FiguresList exposing ( getNextFigure )
 import Components.RemoveLayersFromGlass exposing ( removeLayersFromGlass )
 
+
 addFigureToGlass : Model -> Model
 addFigureToGlass model =
   let
