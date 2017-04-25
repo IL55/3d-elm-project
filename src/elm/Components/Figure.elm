@@ -104,6 +104,7 @@ figureFaces glass figure =
 
     faces = List.map (\ block -> blockFaces glass block Color.red) blocks
       |> List.concat
+    -- faces = []
   in
     faces
 

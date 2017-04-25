@@ -1,7 +1,8 @@
 module Components.Block exposing (..)
 import Math.Vector3 as Vec3 exposing (vec3, Vec3)
 import Color exposing (Color)
-import List.Extra exposing ( groupWhile )
+import Dict.Extra exposing ( groupBy )
+import Dict exposing ( values )
 
 import Components.Model exposing (Model, Game, GameGlass, BlockPosition)
 import Components.Vertex exposing (..)
@@ -103,7 +104,7 @@ getColorByDepth z =
 blocksFaces : GameGlass -> List ( BlockPosition ) -> List ( Vertex, Vertex, Vertex )
 blocksFaces glass blocks =
   let
-    groups = groupWhile (\ a b -> a.z == b.z ) blocks
+    groups = Dict.values (groupBy .z blocks)
     groupsFaces = List.map (\ group ->
         (List.map (\ block -> blockFaces glass block (getColorByDepth block.z)) group)
     ) groups

@@ -50,21 +50,19 @@ model = {
     glass = calculateSizes 10 4,
     blocks = [],
     figure = {
-      figureType = 1,
+      figureType = 0,
       position = {
         center = { x = 0, y = 0, z = 0 },
         rotation = { x = 0, y = 0, z = 0 }
       },
-      blocks = [
-        { x = 0, y = 0, z = 0 }
-      ]
+      blocks = []
     }
   }
  }
 
 init : ( Model, Cmd msg )
 init =
-    ( model, Cmd.none )
+    ( addFigureToGlass model, Cmd.none )
 
 -- UPDATE
 type Msg = NoOp |
@@ -92,7 +90,7 @@ type Msg = NoOp |
 update : Msg -> Model -> (Model, Cmd msg)
 update msg model =
   let
-    _ = Debug.log "yo" model
+    _ = Debug.log "yo"
   in
   case msg of
     NoOp -> ( model, Cmd.none )
