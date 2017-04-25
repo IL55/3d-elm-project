@@ -13,6 +13,17 @@ machine:
 
 test:
   post:
+    # Install sysconfcpus
+    # Reference: https://github.com/elm-lang/elm-compiler/issues/1473#issuecomment-245704142
+    - |
+      export PATH=$HOME/.cpus/bin:$PATH;
+      if ! hash sysconfcpus 2>/dev/null; then
+        git clone --depth=1 https://github.com/obmarg/libsysconfcpus.git "$HOME/libsysconfcpus";
+        cd "$HOME/libsysconfcpus";
+        ./configure --prefix="$HOME/.cpus";
+        make -j2 install;
+      fi
+    - sysconfcpus -n 2
     - npm run build
     - sed -i -r '/^dist\/?\s*$/d' .gitignore
     - git config user.name "igor@salsitasoft.com"
