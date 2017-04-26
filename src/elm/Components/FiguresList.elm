@@ -118,9 +118,7 @@ getNextFigure seed width =
     gen = Random.int 0 (List.length figuresList - 1)
     (index, newSeed) = Random.step gen seed
 
-    indexTest = 6
-
-    newFigure = Maybe.withDefault emptyFigure (List.drop indexTest figuresList |> List.head)
+    newFigure = Maybe.withDefault emptyFigure (List.drop index figuresList |> List.head)
     pos = newFigure.position
     center = newFigure.position.center
 
