@@ -11,6 +11,7 @@ dependencies:
         git clone --depth=1 https://github.com/obmarg/libsysconfcpus.git "$HOME/libsysconfcpus";
         cd "$HOME/libsysconfcpus";
         sudo ./configure;
+        sudo make;
         sudo make install;
       fi
 
@@ -42,5 +43,5 @@ deployment:
   prod:
     branch: master
     commands:
-      - git push -f git@heroku.com:travy-urala.git ${CIRCLE_BRANCH}:master
+      - git status
 
