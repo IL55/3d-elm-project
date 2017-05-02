@@ -26,7 +26,7 @@ test:
     # Install sysconfcpus
     # Reference: https://github.com/elm-lang/elm-compiler/issues/1473#issuecomment-245704142
 
-    - /home/ubuntu/sysconfcpus/bin/sysconfcpus -n 2 make elm
+    - sysconfcpus -n 2 make elm
     - npm run build
     - sed -i -r '/^dist\/?\s*$/d' .gitignore
     - git config user.name "igor@salsitasoft.com"
