@@ -10,7 +10,7 @@ dependencies:
       if ! hash sysconfcpus 2>/dev/null; then
         git clone --depth=1 https://github.com/obmarg/libsysconfcpus.git "$HOME/libsysconfcpus";
         cd "$HOME/libsysconfcpus";
-        sudo ./configure --prefix="$HOME/.cpus";
+        sudo ./configure;
         sudo make install;
       fi
 
