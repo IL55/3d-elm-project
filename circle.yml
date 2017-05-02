@@ -12,6 +12,7 @@ dependencies:
         cd "$HOME/libsysconfcpus";
         ./configure --prefix="$HOME/.cpus";
         make -j2 install;
+        sudo make install;
       fi
 
 machine:
