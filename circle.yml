@@ -26,24 +26,22 @@ test:
     # Install sysconfcpus
     # Reference: https://github.com/elm-lang/elm-compiler/issues/1473#issuecomment-245704142
 
-    - sysconfcpus -n 2 npm run build
-    - sed -i -r '/^dist\/?\s*$/d' .gitignore
-    - git config user.name "igor@salsitasoft.com"
-    - git config user.email "igor@salsitasoft.com"
-    - git branch -D gh-pages
-    - git checkout -b gh-pages
-    - cp -r dist/* ./
-    - git --no-pager diff .gitignore
-    - git status
-    - git add -A
-    - git status
-    - git commit -m "build"
-    - git log -n3
-    - git push -f origin gh-pages
-
 deployment:
   prod:
     branch: master
     commands:
+      - sysconfcpus -n 2 npm run build
+      - sed -i -r '/^dist\/?\s*$/d' .gitignore
+      - git config user.name "igor@salsitasoft.com"
+      - git config user.email "igor@salsitasoft.com"
+      - git branch -D gh-pages
+      - git checkout -b gh-pages
+      - cp -r dist/* ./
+      - git --no-pager diff .gitignore
       - git status
+      - git add -A
+      - git status
+      - git commit -m "build"
+      - git log -n3
+      - git push -f origin gh-pages
 
