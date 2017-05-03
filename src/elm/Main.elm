@@ -3,12 +3,11 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick )
 import Keyboard exposing (..)
-import Json.Decode
 
 -- component import example
 
 import Components.Model exposing ( Model, Game, GameGlass )
-import Components.Hello exposing ( hello )
+import Components.Score exposing ( score )
 import Components.Game exposing ( game )
 import Components.ChangeGlassSize exposing (..)
 import Components.ChangeFigurePosition exposing (..)
@@ -56,7 +55,8 @@ model = {
         rotation = { x = 0, y = 0, z = 0 }
       },
       blocks = []
-    }
+    },
+    score = 0
   }
  }
 
@@ -170,7 +170,7 @@ view model =
     div [ class "row" ][
       div [ class "col-xs-12" ][
         div [ class "jumbotron" ][
-          hello model.number
+          score model.game.score
           , game model
           , p [] [
             text ( "Angle" )

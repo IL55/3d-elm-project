@@ -13,11 +13,11 @@ removeLayersFromGlass model =
     width = oldGame.glass.width
     w2 = width * width
     groups = Dict.values (groupBy .z oldBlocks)
-    _ = Debug.log "groups" groups
+    -- _ = Debug.log "groups" groups
 
-    newBlocks = List.foldr (\ group (newGroups, zShift) ->
+    (newBlocksGroups, removedLayers) = List.foldr (\ group (newGroups, zShift) ->
       let
-        _ = Debug.log "List.length group" (List.length group)
+        -- _ = Debug.log "List.length group" (List.length group)
         filteredGroups =
           if List.length group < w2 then
             let
@@ -39,12 +39,17 @@ removeLayersFromGlass model =
       in
         (filteredGroups, zNewShift)
       ) ([], 0) groups
-        |> Tuple.first
-        |> List.concat
+
+
+    newBlocks = List.concat newBlocksGroups
+    _ = Debug.log "removedLayers" removedLayers
 
     changedModel = { model |
       game = { oldGame |
-        blocks = newBlocks
+        blocks = newBlocks,
+        -- add to score number of applied blocks
+        -- in the old figure
+        score = oldGame.score + (removedLayers * removedLayers * w2)
       }
     }
   in

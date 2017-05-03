@@ -28,7 +28,7 @@ isGlassIntersection glass block =
   let
     x = (block.x > (glass.width - 1)) || (block.x < 0)
     y = (block.y > (glass.width - 1)) || (block.y < 0)
-    z = (block.z > (glass.depth - 1)) || (block.z < 0)
+    z = (block.z > (glass.depth - 1))
   in
     x || y || z
 

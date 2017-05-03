@@ -62,7 +62,10 @@ type alias Game = {
   blocks: List ( BlockPosition ),
 
   -- current figure
-  figure: GameFigure
+  figure: GameFigure,
+
+  -- current score
+  score: Int
 }
 
 -- MODEL

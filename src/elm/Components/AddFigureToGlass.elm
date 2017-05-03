@@ -26,7 +26,10 @@ addFigureToGlass model =
       seed = newSeed,
       game = { oldGame |
         blocks = newBlocks,
-        figure = newFigure
+        figure = newFigure,
+        -- add to score number of applied blocks
+        -- in the old figure
+        score = oldGame.score + List.length oldGame.figure.blocks
       }
     }
   in
