@@ -31,6 +31,7 @@ test:
     - git config user.name "igor@salsitasoft.com"
     - git config user.email "igor@salsitasoft.com"
     - git checkout -b gh-pages
+    - cp -r dist/* ./
     - git --no-pager diff .gitignore
     - git status
     - git add -A
