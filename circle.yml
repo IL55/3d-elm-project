@@ -30,6 +30,7 @@ test:
     - sed -i -r '/^dist\/?\s*$/d' .gitignore
     - git config user.name "igor@salsitasoft.com"
     - git config user.email "igor@salsitasoft.com"
+    - git branch -D gh-pages
     - git checkout -b gh-pages
     - cp -r dist/* ./
     - git --no-pager diff .gitignore
