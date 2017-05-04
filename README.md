@@ -4,7 +4,9 @@
 
 ##demo 
 
-https://il55.github.io/3d-elm-project/index.html
+[[https://github.com/il55/3d-elm-project/blob/master/gameView.png|alt=game]]
+
+(link to play)[https://il55.github.io/3d-elm-project/dist/index.html]
 
 bootstrap from https://github.com/moarwick/elm-webpack-starter 
 
