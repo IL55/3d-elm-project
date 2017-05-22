@@ -13,7 +13,9 @@
     "build": "npm run build:clean && npm run build:app",
     "build:clean": "rimraf -rf dist/ build/",
     "build:app": "webpack",
-    "reinstall": "npm i rimraf && rimraf node_modules && npm uninstall -g elm && npm i -g elm && npm i && elm package install --yes"
+    "reinstall": "npm i rimraf && rimraf node_modules && npm uninstall -g elm && npm i -g elm && npm i && elm package install --yes",
+    "test": "elm-test",
+    "test:dev": "elm-test --watch"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",

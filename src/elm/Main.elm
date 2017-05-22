@@ -3,6 +3,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick )
 import Keyboard exposing (..)
+import Time exposing ( Time )
 
 -- component import example
 
@@ -12,8 +13,9 @@ import Components.Game exposing ( game )
 import Components.ChangeGlassSize exposing (..)
 import Components.ChangeFigurePosition exposing (..)
 import Components.AddFigureToGlass exposing (..)
-import Random exposing (..)
 import Components.KeyPress exposing ( processKeyPress )
+import Components.ProcessTick exposing ( processTick )
+import Components.InitialModel exposing ( initialModel )
 
 -- define port
 port showPortName : String -> Cmd msg
@@ -21,7 +23,10 @@ port showPortName : String -> Cmd msg
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ Keyboard.downs KeyMsg ]
+        [
+          Keyboard.downs KeyMsg,
+          Time.every (Time.second * 5) Tick
+        ]
 
 
 -- APP
@@ -35,30 +40,7 @@ main =
   }
 
 model : Model
-model = {
-  seed = Random.initialSeed 31,
-  style = "Blue",
-  number = 1,
-  isCool = True,
-  theta = 3.2,
-  game = {
-    view = {
-      width = 400,
-      height = 400
-    },
-    glass = calculateSizes 10 4,
-    blocks = [],
-    figure = {
-      figureType = 0,
-      position = {
-        center = { x = 0, y = 0, z = 0 },
-        rotation = { x = 0, y = 0, z = 0 }
-      },
-      blocks = []
-    },
-    score = 0
-  }
- }
+model = initialModel
 
 init : ( Model, Cmd msg )
 init =
@@ -85,7 +67,8 @@ type Msg = NoOp |
   IncrementFigureCenterZMsg |
   DecrementFigureCenterZMsg |
   AddFigureToGlassMsg |
-  KeyMsg Keyboard.KeyCode
+  KeyMsg Keyboard.KeyCode |
+  Tick Time
 
 update : Msg -> Model -> (Model, Cmd msg)
 update msg model =
@@ -160,6 +143,10 @@ update msg model =
 
     KeyMsg code ->
       ( processKeyPress model code, Cmd.none )
+
+    Tick newTime ->
+      ( processTick model, Cmd.none )
+
 
 -- VIEW
 -- Html is defined as: elem [ attribs ][ children ]
