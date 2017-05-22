@@ -3,6 +3,7 @@ dependencies:
     - node_modules
     - elm-stuff/build-artifacts
     - sysconfcpus
+    - tests/elm-stuff/build-artifacts
   pre:
     - npm i -g elm elm-test && npm i && elm package install --yes
     - |
